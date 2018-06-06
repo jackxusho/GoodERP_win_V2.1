@@ -1,0 +1,59 @@
+<odoo>
+  <data>
+    <!-- explicit list view definition -->
+    <!--
+    <record model="ir.ui.view" id="gzlsd_mhotel.list">
+      <field name="name">gzlsd_mhotel list</field>
+      <field name="model">gzlsd_mhotel.gzlsd_mhotel</field>
+      <field name="arch" type="xml">
+        <tree>
+          <field name="name"/>
+          <field name="value"/>
+          <field name="value2"/>
+        </tree>
+      </field>
+    </record>
+    -->
+
+    <!-- actions opening views on models -->
+    <!--
+    <record model="ir.actions.act_window" id="gzlsd_mhotel.action_window">
+      <field name="name">gzlsd_mhotel window</field>
+      <field name="res_model">gzlsd_mhotel.gzlsd_mhotel</field>
+      <field name="view_mode">tree,form</field>
+    </record>
+    -->
+
+    <!-- server action to the one above -->
+    <!--
+    <record model="ir.actions.server" id="gzlsd_mhotel.action_server">
+      <field name="name">gzlsd_mhotel server</field>
+      <field name="model_id" ref="model_gzlsd_mhotel_gzlsd_mhotel"/>
+      <field name="code">
+        action = {
+          "type": "ir.actions.act_window",
+          "view_mode": "tree,form",
+          "res_model": self._name,
+        }
+      </field>
+    </record>
+    -->
+
+    <!-- Top menu item -->
+    <!--
+    <menuitem name="gzlsd_mhotel" id="gzlsd_mhotel.menu_root"/>
+    -->
+    <!-- menu categories -->
+    <!--
+    <menuitem name="Menu 1" id="gzlsd_mhotel.menu_1" parent="gzlsd_mhotel.menu_root"/>
+    <menuitem name="Menu 2" id="gzlsd_mhotel.menu_2" parent="gzlsd_mhotel.menu_root"/>
+    -->
+    <!-- actions -->
+    <!--
+    <menuitem name="List" id="gzlsd_mhotel.menu_1_list" parent="gzlsd_mhotel.menu_1"
+              action="gzlsd_mhotel.action_window"/>
+    <menuitem name="Server to list" id="gzlsd_mhotel" parent="gzlsd_mhotel.menu_2"
+              action="gzlsd_mhotel.action_server"/>
+    -->
+  </data>
+</odoo>
