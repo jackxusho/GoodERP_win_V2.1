@@ -1,27 +1,16 @@
 # -*- coding: utf-8 -*-
 {
-    'name': "gzlsd_room",
-
-    'summary': """
-        Short (1 phrase/line) summary of the module's purpose, used as
-        subtitle on modules listing or apps.openerp.com""",
-
-    'description': """
-        Long description of module's purpose
-    """,
-
-    'author': "My Company",
-    'website': "http://www.yourcompany.com",
-
-    # Categories can be used to filter modules in modules listing
-    # Check https://github.com/odoo/odoo/blob/master/odoo/addons/base/module/module_data.xml
-    # for the full list
-    'category': 'Uncategorized',
+    'name': "GZLSD 房间管理",
+    'author': "广州菱致计算机科技有限公司",
+    'website': "www.sglsd.com",
+    'category': 'gzlsd',
+    'summary': '通用房间管理模块',
+    "description":
+    '''
+    该模块实现通用的房间管理，房型管理，房价管理，房间状态管理，未来房态查询，以及外部调用接口。。
+    ''',
     'version': '0.1',
-
-    # any module necessary for this one to work correctly
-    'depends': ['base'],
-
+    'depends': ["mail"],
     # always loaded
     'data': [
         # 'security/ir.model.access.csv',
@@ -32,4 +21,5 @@
     'demo': [
         'demo/demo.xml',
     ],
+    'license': 'AGPL-3',
 }
