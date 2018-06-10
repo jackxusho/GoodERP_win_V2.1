@@ -14,9 +14,9 @@ class TrainingSubject(models.Model):
     manager_id = fields.Many2one(string=u'负责人',
                                  comodel_name='res.users')
 
-    lesson_ids = fields.One2many(comodel_name='training.lesson', inverse_name='subject_id', string='课程')
+    lesson_ids = fields.One2many(comodel_name='training.lesson', inverse_name='subject_id', string=u'课程')
 
-    description = fields.Text('描述')
+    description = fields.Text(u'描述')
 
     @api.multi
     def name_get(self):
@@ -32,7 +32,7 @@ class TrainingSubject(models.Model):
             # 在xml文件的 training_lesson_form的subject_id中，用  context="{'is_form':'1'}" 写入标记
             # 在此处通过读取标记判断是从form进入
             for ele in res:
-                result.append((ele[0], ele[1] + '-' + self.browse(ele[0]).manager_id.name))
+                result.append((ele[0], ele[1] + '-' + str(self.browse(ele[0]).manager_id.name)))
         else:
             result = res
         return result
@@ -49,22 +49,22 @@ class TrainingLesson(models.Model):
 
     subject_id = fields.Many2one(string=u'科目名称',
                                  comodel_name='training.subject')
-    start_date = fields.Date("开始日期" ,
+    start_date = fields.Date(u"开始日期" ,
                              track_visibility='onchange')
-    end_date = fields.Date("结束日期")
-    sites = fields.Integer("座位数")
-    teacher_id = fields.Many2one(comodel_name='res.partner', string="老师", domain="[('is_teacher','=',True)]",
+    end_date = fields.Date(u"结束日期")
+    sites = fields.Integer(u"座位数")
+    teacher_id = fields.Many2one(comodel_name='res.partner', string=u"老师", domain="[('is_teacher','=',True)]",
                                  ondelete='restrict')
-    student_ids = fields.Many2many(comodel_name='res.partner', string="学生")
-    state = fields.Selection([('new', '招生'), ('start', '已开课'),
-                              ('end', '已结束')], string="课程状态", default='new',
+    student_ids = fields.Many2many(comodel_name='res.partner', string=u"学生")
+    state = fields.Selection([('new', u'招生'), ('start', u'已开课'),
+                              ('end', u'已结束')], string=u"课程状态", default='new',
                              track_visibility='aways')
-    continue_days = fields.Integer(string='持续天数', compute='_get_continue_days', store=True)
-    progress = fields.Float(string='报名进度', compute='_get_progress_and_remain_seats')
-    remain_seats = fields.Float(string='剩下名额', compute='_get_progress_and_remain_seats', inverse='_inverse_seats',
+    continue_days = fields.Integer(string=u'持续天数', compute='_get_continue_days', store=True)
+    progress = fields.Float(string=u'报名进度', compute='_get_progress_and_remain_seats')
+    remain_seats = fields.Float(string=u'剩下名额', compute='_get_progress_and_remain_seats', inverse='_inverse_seats',
                                 store=True, digits=(16, 0))
     # inverse 反过来计算功能，如果没有该选项，计算字段不可编辑，如果指定的话，可以编辑用于反算
-    manager_id = fields.Many2one('res.users', related='subject_id.manager_id', string='负责人', readonly=True, store=True)
+    manager_id = fields.Many2one('res.users', related='subject_id.manager_id', string=u'负责人', readonly=True, store=True)
 
     @api.depends('sites')
     def _inverse_seats(self):
@@ -124,17 +124,17 @@ class TrainingLesson(models.Model):
 
     # 数据库约束，将在数据库创建约束
     _sql_constraints = [
-        ('uniq_name', 'unique(name)', '课程名字必须唯一')
+        ('uniq_name', 'unique(name)', u'课程名字必须唯一')
     ]
 
 
 # 报名向导界面
 class Apply(models.TransientModel):
     _name = 'training.apply'
-    lesson_id = fields.Many2one(string="课程", comodel_name='training.lesson',
+    lesson_id = fields.Many2one(string=u"课程", comodel_name='training.lesson',
                                 default = lambda self:self.env.context.get('active_id'))
-    student_ids = fields.Many2many(string="报名学生", comodel_name='res.partner')
-    state = fields.Selection([('new', '招生'), ('start', '已开课'), ('end', '已结束')], string="课程状态")
+    student_ids = fields.Many2many(string=u"报名学生", comodel_name='res.partner')
+    state = fields.Selection([('new', u'招生'), ('start', '已开课'), ('end', u'已结束')], string=u"课程状态")
 
     @api.multi
     def do_apply(self):

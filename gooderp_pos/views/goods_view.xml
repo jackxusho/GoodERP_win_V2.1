@@ -5,7 +5,7 @@
         <field name="model">goods</field>
         <field name="inherit_id" ref="goods.goods_form"/>
         <field name="arch" type="xml">
-            <page name="advanced_info" position="after">
+            <page name="normal_info" position="after">
                 <page name="pos_info" string="POS">
                     <group>
                         <group name="pos">
