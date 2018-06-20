@@ -3,7 +3,14 @@
 from odoo import http
 from odoo.http import request
 from odoo.tools.safe_eval import safe_eval as eval
-import odoo
+
+
+import struct
+from calendar import timegm
+from datetime import datetime
+import jwt
+
+
 import simplejson
 import os
 import sys
@@ -28,7 +35,7 @@ env = jinja2.Environment('<%', '%>', '${', '}', '%', loader=loader, autoescape=T
 
 
 class MobileSupport(http.Controller):
-    @http.route('/mobile/login', type='http', auth='none', csrf=False, cors='http://192.168.3.8')
+    @http.route('/mobile/login', type='http', auth='none', csrf=False, cors='*')
     def login(self, db_choose=''):
         db_list = http.db_list() or []
         db_list_by_mobile = []
@@ -51,9 +58,9 @@ class MobileSupport(http.Controller):
         # return template.render({'db_list': db_list_by_mobile, 'db_choose': db_choose})
 
     @http.route('/mobile/db_login', type='http', auth='none', methods=['POST'], website=True, csrf=False,
-                cors='http://192.168.3.8')
+                cors='*')
     def db_login(self, **post):
-        print(post)
+        # print(post)
         request.session.db = post['db']
         uid = request.session.authenticate(request.session.db, post['account'], post['passwd'])
 
@@ -67,9 +74,20 @@ class MobileSupport(http.Controller):
             }
         }
         if uid is not False:
+            payload = {
+                'uid': uid,
+                'exp': timegm(datetime.utcnow().utctimetuple()) + 5000
+            }
+
+            secret = 'secret_gzlsd_!@#$%'
+            jwt_message = jwt.encode(payload, secret)
+            decoded_payload = jwt.decode(jwt_message, secret)
+            assert decoded_payload == payload
+
             return request.make_response(simplejson.dumps({
                 'code': '0',
                 'data': {'msg': u'登录成功。',
+                         'token': jwt_message,
                          'user': users
                          }
                 }
@@ -151,7 +169,7 @@ class MobileSupport(http.Controller):
         view = request.env['mobile.view'].search([('name', '=', name)])
         return view.limit or 20
 
-    @http.route('/mobile/get_lists', auth='public', type='http', cors='http://192.168.3.8')
+    @http.route('/mobile/get_lists', auth='public', type='http', cors='*')
     def get_lists(self, name, options):
         options = simplejson.loads(options)
 
@@ -173,7 +191,7 @@ class MobileSupport(http.Controller):
                 } for record in model_obj.with_context(options.get('context') or {}).search_read(
                     domain=domain, fields=map(lambda field: field.get('name'), headers.values()),
                     offset=self._parse_int(options.get('offset', 0)), limit=limit, order=order)]
-            }), [('Access-Control-Allow-Credentials', 'true')])
+            }))
         else:
             headers = self._get_form_fields_list(name)
             return request.make_response(simplejson.dumps([{
@@ -183,7 +201,7 @@ class MobileSupport(http.Controller):
                 'column': headers.get(key, {}).get('column'),
             } for key, value in model_obj.with_context(options.get('context') or {}).browse(self._parse_int(
                 options.get('record_id'))).read(headers.keys())[0].iteritems()
-            ]), [('Access-Control-Allow-Credentials', 'true')])
+            ]))
 
     @http.route('/mobile/get_search_view', auth='public')
     def get_search_view(self, name):

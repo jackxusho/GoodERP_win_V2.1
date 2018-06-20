@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+	<data>
+        <record id='mobile_menu_tree' model='ir.ui.view'>
+            <field name='name'>mobile.menu.tree</field>
+            <field name='model'>mobile.menu</field>
+            <field name='arch' type='xml'>
+                <tree string='移动菜单'>
+                    <field name='menu_id' />
+					<field name='p_id' />
+                    <field name='name' />
+                    <field name='route' />
+                    <field name='icon' />
+                    <field name='color' />
+                    <field name='app_type' />
+                </tree>
+            </field>
+        </record>
+
+        <record id='mobile_menu_form' model='ir.ui.view'>
+            <field name='name'>mobile.menu.form</field>
+            <field name='model'>mobile.menu</field>
+            <field name='arch' type='xml'>
+                <form string='移动菜单'>
+                    <sheet>
+                        <group>
+                              <field name='menu_id' />
+                            <field name='p_id' />
+                            <field name='name' />
+                            <field name='route' />
+                            <field name='icon' />
+                            <field name='color' />
+                            <field name='app_type' />
+                        </group>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <record id='mobile_menu_action' model='ir.actions.act_window'>
+            <field name='name'>移动菜单</field>
+            <field name='res_model'>mobile.menu</field>
+            <field name='view_mode'>tree,form</field>
+        </record>
+
+        <menuitem id='mobile_menu_menu' parent='core.system_menu' action='mobile_menu_action' />
+
+
+     <!-- 继承 groups form 添加移动menu信息 -->
+        <record id='mobile_res_groups_form' model='ir.ui.view'>
+        <field name='name'>mobile.res.groups.form</field>
+        <field name='model'>res.groups</field>
+        <field name='inherit_id' ref='base.view_groups_form'/>
+        <field name='arch' type='xml'>
+
+            <xpath expr="//notebook/page[3]" position="after">
+                     <page string="移动菜单">
+                         <field name="mobile_menu_access"/>
+                     </page>
+            </xpath>
+
+        </field>
+        </record>
+    </data>
+</openerp>

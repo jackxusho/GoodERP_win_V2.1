@@ -37,6 +37,7 @@
     """,
     'data': [
         'view/mobile_view.xml',
+        'view/mobile_menu.xml',
         'data/test_demo.xml',
         'security/ir.model.access.csv',
     ],
