@@ -16,11 +16,12 @@ class make_response:
         @wraps(func)
         def wrapper(*args, **kwargs):
             try:
+                headers = {"Access-Control-Allow-Credentials": "true",
+                           'Access-Control-Allow-Origin': 'http://192.168.3.8'}
                 result_data = func(*args, **kwargs)
                 # 如果是返回错误代码和描述
-                if isinstance(result_data, types.DictType):
-                    if 'code' in result_data and result_data.get('code') < '0':
-                        return request.make_response(json.dumps(result_data))
+                if isinstance(result_data, types.DictType) and 'code' in result_data:
+                    return request.make_response(json.dumps(result_data), headers=headers)
 
                 # 格式化返回结果
                 result = {
@@ -29,9 +30,9 @@ class make_response:
                 }
 
                 # json返回
-                return request.make_response(json.dumps(result))
+                return request.make_response(json.dumps(result), headers=headers)
             except Exception, e:
-                return request.make_response(json.dumps({'error': str(e)}))
+                return request.make_response(json.dumps({'code': '500', 'data': str(e)}), headers=headers)
 
         return wrapper
 
