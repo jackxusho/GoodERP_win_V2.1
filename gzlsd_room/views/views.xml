@@ -19,8 +19,6 @@
     <menuitem id='rm_building_menu' name='楼栋/建筑' parent ='rm_setting_menu'
               action='rm_rm_building_action' sequence='2' />
 
-
-
     <record id="rm_rm_building_tree" model="ir.ui.view">
       <field name="name">rm.rm_building.tree</field>
       <field name="model">rm.rm_building</field>
@@ -29,6 +27,8 @@
                 <field name="name" />
                 <field name="sort_id"/>
                 <field name="company_id"/>
+                <field name="longitude"/>
+                <field name="latitude"/>
             </tree>
         </field>
     </record>
@@ -40,9 +40,15 @@
             <form string='楼栋/建筑'>
                 <sheet>
                     <group>
-                        <field name="name" />
-                        <field name="sort_id"  placeholder="越小排越前"/>
-                        <field name="company_id"/>
+                        <group>
+                            <field name="name" />
+                            <field name="sort_id"  placeholder="越小排越前"/>
+                            <field name="company_id"/>
+                        </group>
+                        <group>
+                            <field name="longitude"/>
+                            <field name="latitude"/>
+                        </group>
                     </group>
                     <group>
                         <field name="img" class="oe_attachments" widget="many2many_binary"/>
@@ -86,7 +92,7 @@
         <field name='name'>rm.rm_floor.form</field>
         <field name='model'>rm.rm_floor</field>
         <field name='arch' type='xml'>
-            <form string='楼栋/建筑'>
+            <form string='楼层'>
                 <field name="name" />
                 <field name="code" />
                 <field name="sort_id"/>
@@ -100,7 +106,7 @@
 
         <!--菜单事件-->
     <record id='rm_rm_room_type_action' model='ir.actions.act_window'>
-        <field name='name'>科目</field>
+        <field name='name'>房型</field>
         <field name='res_model'>rm.rm_room_type</field>
         <field name='view_type'>form</field>
         <field name='view_mode'>tree,form</field>
@@ -130,7 +136,7 @@
         <field name='name'>rm.rm_room_type.form</field>
         <field name='model'>rm.rm_room_type</field>
         <field name='arch' type='xml'>
-            <form string='楼栋/建筑'>
+            <form string='房型'>
                 <sheet>
                     <group>
                         <field name="name" />
