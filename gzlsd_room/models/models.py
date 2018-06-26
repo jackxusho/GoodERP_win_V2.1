@@ -13,9 +13,9 @@ class rm_building(models.Model):
     # fields.Binary(string=u"建筑图片")
     company_id = fields.Many2one(string=u'所属公司', required=True, comodel_name='res.partner',
                                  domain="[('is_company', '=', True)]",
-                                 default=lambda self: self.env.user.company_id
-                                 )
-
+                                 default=lambda self: self.env.user.company_id)
+    longitude = fields.Float(string=u'经度', digits=(2, 10), default=0.01)
+    latitude = fields.Float(string=u'维度', digits=(2, 10), default=0.01)
 
 
 class rm_floor(models.Model):
@@ -50,3 +50,17 @@ class rm_room_type(models.Model):
                                  domain="[('is_company', '=', True)]",
                                  default=lambda self: self.env.user.company_id)
     img = fields.Binary(string=u"建筑图片")
+
+
+class rm_building(models.Model):
+    _name = 'rm.rm_building'
+    _rec_name = 'name'
+
+    name = fields.Char(string=u'建筑名称', required=True)
+    sort_id = fields.Integer(string=u'排序值', required=True)
+    img = fields.Many2many('ir.attachment', string=u"建筑图片")
+    # fields.Binary(string=u"建筑图片")
+    company_id = fields.Many2one(string=u'所属公司', required=True, comodel_name='res.partner',
+                                 domain="[('is_company', '=', True)]",
+                                 default=lambda self: self.env.user.company_id
+                                 )

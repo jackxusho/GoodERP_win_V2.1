@@ -27,6 +27,7 @@
                 <field name="name" />
                 <field name="sort_id"/>
                 <field name="company_id"/>
+                <!--<field name="test_field"/>-->
                 <field name="longitude"/>
                 <field name="latitude"/>
             </tree>
@@ -46,6 +47,7 @@
                             <field name="company_id"/>
                         </group>
                         <group>
+                            <!--<field name="test_field"/>-->
                             <field name="longitude"/>
                             <field name="latitude"/>
                         </group>
