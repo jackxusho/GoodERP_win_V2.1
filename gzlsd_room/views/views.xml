@@ -58,10 +58,6 @@
         </field>
     </record>
 
-
-
-
-
         <!--菜单事件-->
     <record id='rm_rm_floor_action' model='ir.actions.act_window'>
         <field name='name'>楼层</field>
@@ -72,8 +68,6 @@
 
     <menuitem id='rm_floor_menu' name='楼层定义' parent ='rm_setting_menu'
               action='rm_rm_floor_action' sequence='3' />
-
-
 
     <record id="rm_rm_floor_tree" model="ir.ui.view">
       <field name="name">rm.rm_floor.tree</field>
