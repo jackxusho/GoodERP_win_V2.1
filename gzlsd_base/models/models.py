@@ -43,9 +43,10 @@ class RoomType(models.Model):
     name = fields.Char(string=u'房型名称', required=True)
     code = fields.Char(string=u"房型代码", required=True)
     sort_id = fields.Integer(string=u'排序值', required=True)
-    func_dummy = fields.Selection(string="房型标记", selection=RM_FUNC_TYPE, required=True, default='G')
+    func_dummy = fields.Selection(string="房型标记", selection=RM_FUNC_TYPE, required=True, default='G',
+                                  track_visibility='aways')
     rate = fields.Float(string="标准房价", required=True)
-    company_id = fields.Many2one(string=u'所属公司', required=True, comodel_name='res.company',
+    company_id = fields.Many2one(string=u'所属公司', required=True, comodel_name='res.partner',
                                  domain="[('is_company', '=', True)]",
                                  default=lambda self: self.env.user.company_id)
     img = fields.Binary(string=u"建筑图片")

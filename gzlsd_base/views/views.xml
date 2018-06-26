@@ -112,7 +112,7 @@
       <field name="name">rm.room_type.tree</field>
       <field name="model">rm.room_type</field>
         <field name='arch' type='xml'>
-            <tree string='房间类型'>
+            <tree string= '房间类型'>
                 <field name="name" />
                 <field name="code" />
                 <field name="sort_id"/>
@@ -128,7 +128,7 @@
         <field name='name'>rm.room_type.form</field>
         <field name='model'>rm.room_type</field>
         <field name='arch' type='xml'>
-            <form string='房间类型'>
+            <form string='房型'>
                 <sheet>
                     <group>
                         <field name="name" />
