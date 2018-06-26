@@ -15,9 +15,9 @@ class make_response:
     def __call__(self, func):
         @wraps(func)
         def wrapper(*args, **kwargs):
+            headers = {"Access-Control-Allow-Credentials": "true",
+                       'Access-Control-Allow-Origin': 'http://192.168.3.8'}
             try:
-                headers = {"Access-Control-Allow-Credentials": "true",
-                           'Access-Control-Allow-Origin': 'http://192.168.3.8'}
                 result_data = func(*args, **kwargs)
                 # 如果是返回错误代码和描述
                 if isinstance(result_data, types.DictType) and 'code' in result_data:
@@ -31,7 +31,7 @@ class make_response:
 
                 # json返回
                 return request.make_response(json.dumps(result), headers=headers)
-            except Exception, e:
+            except Exception as e:
                 return request.make_response(json.dumps({'code': '500', 'data': str(e)}), headers=headers)
 
         return wrapper

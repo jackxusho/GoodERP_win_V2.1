@@ -9,12 +9,13 @@ class rm_building(models.Model):
 
     name = fields.Char(string=u'建筑名称', required=True)
     sort_id = fields.Integer(string=u'排序值', required=True)
-    img = fields.Many2many('a', string=u"建筑图片")
+    img = fields.Many2many('ir.attachment', string=u"建筑图片")
     # fields.Binary(string=u"建筑图片")
     company_id = fields.Many2one(string=u'所属公司', required=True, comodel_name='res.partner',
                                  domain="[('is_company', '=', True)]",
                                  default=lambda self: self.env.user.company_id
                                  )
+
 
 
 class rm_floor(models.Model):

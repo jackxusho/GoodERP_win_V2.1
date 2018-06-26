@@ -10,7 +10,7 @@
 
     <!--菜单事件-->
     <record id='rm_rm_building_action' model='ir.actions.act_window'>
-        <field name='name'>科目</field>
+        <field name='name'>建筑</field>
         <field name='res_model'>rm.rm_building</field>
         <field name='view_type'>form</field>
         <field name='view_mode'>tree,form</field>
@@ -45,8 +45,6 @@
                         <field name="company_id"/>
                     </group>
                     <group>
-                        <!--<field name='img' widget='image' nolabel='1'-->
-                        <!--options='{"preview_image": "img", "width": "100%"}'/>-->
                         <field name="img" class="oe_attachments" widget="many2many_binary"/>
                     </group>
                 </sheet>

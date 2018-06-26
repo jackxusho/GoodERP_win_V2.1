@@ -19,6 +19,11 @@ from odoo.http import request
 
 from odoo.addons.web.controllers.main import WebClient
 
+try:
+    from cStringIO import StringIO
+except Exception as e:
+    from StringIO import StringIO
+
 
 # auth 3种模式
 # user: The user must be authenticated and the current request will perform using the rights that the user
@@ -130,24 +135,6 @@ class MobileSupport(http.Controller):
                     'image_s': user.image_small}
         return {'user': user_inf, 'menus': menus}
 
-    # @http.route('/mobile', type='http', auth='none')
-    # def index(self):
-    #     if not request.db or not request.session.uid:
-    #         return werkzeug.utils.redirect('/mobile/login')
-    #
-    #     return werkzeug.utils.redirect('/mobile/home')
-    #
-    # @http.route('/mobile/home', auth='public')
-    # def home(self):
-    #     if not request.session.get('uid') or not request.session.uid:
-    #         return werkzeug.utils.redirect('/mobile/login')
-    #
-    #     template = env.get_template('index.html')
-    #     return template.render({
-    #         'menus': request.env['mobile.view'].search_read(
-    #             fields=['name', 'icon_class', 'display_name', 'using_wizard'])
-    #     })
-    #
     # def _get_model(self, name):
     #     view = request.env['mobile.view'].search([('name', '=', name)])
     #     return request.env[view.model]
@@ -163,23 +150,25 @@ class MobileSupport(http.Controller):
     #         'right': dict(attribs[2], column=view.column_type(attribs[2].get('name', ''))),
     #     }
     #
-    # def _get_form_fields_list(self, name):
-    #     view = request.env['mobile.view'].search([('name', '=', name)])
-    #     tree = ElementTree.parse(StringIO(view.arch.encode('utf-8')))
-    #
-    #     return {node.attrib.get('name'): dict(node.attrib, column=view.column_type(node.attrib.get('name', '')))
-    #             for node in tree.findall('.//form/field')}
-    #
-    # def _get_format_domain(self, name, domain):
-    #     view = request.env['mobile.view'].search([('name', '=', name)])
-    #     res = view.domain and eval(view.domain) or []
-    #     res.extend([(
-    #         item.get('name'),
-    #         item.get('operator') or 'ilike',
-    #         item.get('operator') and float(item.get('word')) or item.get('word')
-    #     ) for item in domain])
-    #
-    #     return res
+    def _get_form_fields_list(self, name):
+        view = request.env['mobile.view'].search([('name', '=', name)])
+        if view:
+            tree = ElementTree.parse(StringIO(view.arch.encode('utf-8')))
+            return {node.attrib.get('name'): dict(node.attrib, column=view.column_type(node.attrib.get('name', '')))
+                    for node in tree.findall('.//form/field')}
+        return False
+
+    def _get_format_domain(self, name, domain):
+        view = request.env['mobile.view'].search([('name', '=', name)])
+        res = view.domain and eval(view.domain) or []
+        res.extend([(
+            item.get('name'),
+            item.get('operator') or 'ilike',
+            item.get('operator') and float(item.get('word')) or item.get('word')
+        ) for item in domain])
+
+        return res
+
     #
     # def _get_order(self, name, order):
     #     if len(order.split()) == 2:
@@ -236,33 +225,35 @@ class MobileSupport(http.Controller):
     #             options.get('record_id'))).read(headers.keys())[0].iteritems()
     #         ]))
     #
-    # @http.route('/mobile/get_search_view', auth='public')
-    # def get_search_view(self, name):
-    #     view = request.env['mobile.view'].search([('name', '=', name)])
-    #     tree = ElementTree.parse(StringIO(view.arch.encode('utf-8')))
-    #
-    #     return request.make_response(simplejson.dumps(
-    #         [dict(node.attrib, column=view.column_type(
-    #             node.attrib.get('name', ''))) for node in tree.findall('.//search/field')]
-    #     ))
-    #
-    # @http.route('/mobile/get_wizard_view', auth='public')
-    # def get_wizard_view(self, name):
-    #     view = request.env['mobile.view'].search([('name', '=', name)])
-    #     tree = ElementTree.parse(StringIO(view.arch.encode('utf-8')))
-    #
-    #     return request.make_response(simplejson.dumps(
-    #         [dict(node.attrib, value='') for node in tree.findall('.//wizard/field')]
-    #     ))
-    #
-    # @http.route('/mobile/many2one/search', auth='public')
-    # def many2one_search(self, word, model, domain):
-    #     return request.make_response(simplejson.dumps([
-    #         {
-    #             'id': record[0], 'value': record[1]
-    #         } for record in request.env[model].name_search(
-    #             word, args=eval(domain), limit=20)
-    #     ]))
+
+    @http.route('/mobile/get_search_view', type="http", auth="user", csrf=False,
+                website=True)
+    @make_response()
+    def get_search_view(self, name):
+        view = request.env['mobile.view'].search([('name', '=', name)])
+        tree = ElementTree.parse(StringIO(view.arch.encode('utf-8')))
+        return simplejson.dumps(
+            [dict(node.attrib, column=view.column_type(
+                node.attrib.get('name', ''))) for node in tree.findall('.//search/field')]
+        )
+
+    @http.route('/mobile/get_wizard_view', auth='public')
+    def get_wizard_view(self, name):
+        view = request.env['mobile.view'].search([('name', '=', name)])
+        tree = ElementTree.parse(StringIO(view.arch.encode('utf-8')))
+
+        return request.make_response(simplejson.dumps(
+            [dict(node.attrib, value='') for node in tree.findall('.//wizard/field')]
+        ))
+
+    @http.route('/mobile/many2one/search', auth='public')
+    def many2one_search(self, word, model, domain):
+        return request.make_response(simplejson.dumps([
+            {
+                'id': record[0], 'value': record[1]
+            } for record in request.env[model].name_search(
+                word, args=eval(domain), limit=20)
+        ]))
 
     @http.route(['/mobile/common/version'], type="http", auth="user", csrf=False,
                 website=True)
@@ -276,7 +267,7 @@ class MobileSupport(http.Controller):
         return version_info
 
     @http.route(['/mobile/workflow/<string:object>/<int:id>/<string:signal>'],
-                type="http", auth='none', csrf=False, website=True)
+                type="http", auth='user', csrf=False, website=True)
     @make_response()
     def call_workflow(self, object, id=None, signal=None, **kwargs):
         """
@@ -304,7 +295,7 @@ class MobileSupport(http.Controller):
 
     @http.route(['/mobile/report/<string:xml_id>/<int:id>',
                  '/mobile/report/<string:xml_id>'],
-                type="http", auth='none', csrf=False, website=True)
+                type="http", auth='user', csrf=False, website=True)
     @make_response()
     def call_report(self, xml_id, id=None, **kwargs):
         """
@@ -350,7 +341,7 @@ class MobileSupport(http.Controller):
     @http.route(['/mobile/object/<string:object>',
                  '/mobile/object/<string:object>/<int:id>',
                  '/mobile/object/<string:object>/<int:id>/<string:method>'],
-                type="http", auth='none', csrf=False, website=True)
+                type="http", auth='user', csrf=False, website=True)
     @make_response()
     def perform_multi_request(self, object, id=None, method=None, **kwargs):
         user = request.env.user
@@ -364,7 +355,7 @@ class MobileSupport(http.Controller):
         """
         datas = {}
 
-        request_code, request_data = 200, {}
+        # request_code, request_data = 200, {}
         ids, payload = [id] if id else [], {}
         arguments, k_arguments = [], {}
 
@@ -392,6 +383,12 @@ class MobileSupport(http.Controller):
             args = self._METHOD_WITH_ARGS_KWARGS.get(method)
             arguments.extend([self.evaluate(kwargs.get(arg)) for arg in args['arg']])
             k_arguments = dict([(arg, self.evaluate(kwargs[arg])) for arg in args['kwargs'] if kwargs.get(arg)])
+            # 如果没有传递字段清单，尝试使用客户定义的字段清单
+            if 'fields' not in k_arguments:
+                field_define = self._get_form_fields_list(object)
+                if field_define:
+                    k_arguments["fields"] = field_define.keys()
+
             if method in self._GET_METHODS:
                 if type(self.evaluate(kwargs.get('domain'))) is list and ids:
                     arguments[0].append(('id', 'in', ids))
