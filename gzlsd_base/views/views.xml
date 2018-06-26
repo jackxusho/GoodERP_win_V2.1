@@ -9,19 +9,19 @@
     <menuitem id='rm_setting_menu' name='设置' sequence='1' parent ='rm_root'/>
 
     <!--菜单事件-->
-    <record id='rm_rm_building_action' model='ir.actions.act_window'>
+    <record id='rm_building_action' model='ir.actions.act_window'>
         <field name='name'>建筑</field>
-        <field name='res_model'>rm.rm_building</field>
+        <field name='res_model'>rm.building</field>
         <field name='view_type'>form</field>
         <field name='view_mode'>tree,form</field>
     </record>
 
-    <menuitem id='rm_building_menu' name='楼栋/建筑' parent ='rm_setting_menu'
-              action='rm_rm_building_action' sequence='2' />
+    <menuitem id='building_menu' name='楼栋/建筑' parent ='rm_setting_menu'
+              action='rm_building_action' sequence='2' />
 
-    <record id="rm_rm_building_tree" model="ir.ui.view">
-      <field name="name">rm.rm_building.tree</field>
-      <field name="model">rm.rm_building</field>
+    <record id="rm_building_tree" model="ir.ui.view">
+      <field name="name">rm.building.tree</field>
+      <field name="model">rm.building</field>
         <field name='arch' type='xml'>
             <tree string= '楼栋/建筑'>
                 <field name="name" />
@@ -33,9 +33,9 @@
         </field>
     </record>
 
-    <record id='rm_rm_building_form' model ='ir.ui.view'>
-        <field name='name'>rm.rm_building.form</field>
-        <field name='model'>rm.rm_building</field>
+    <record id='rm_building_form' model ='ir.ui.view'>
+        <field name='name'>rm.building.form</field>
+        <field name='model'>rm.building</field>
         <field name='arch' type='xml'>
             <form string='楼栋/建筑'>
                 <sheet>
@@ -59,19 +59,19 @@
     </record>
 
         <!--菜单事件-->
-    <record id='rm_rm_floor_action' model='ir.actions.act_window'>
+    <record id='rm_floor_action' model='ir.actions.act_window'>
         <field name='name'>楼层</field>
-        <field name='res_model'>rm.rm_floor</field>
+        <field name='res_model'>rm.floor</field>
         <field name='view_type'>form</field>
         <field name='view_mode'>tree,form</field>
     </record>
 
-    <menuitem id='rm_floor_menu' name='楼层定义' parent ='rm_setting_menu'
-              action='rm_rm_floor_action' sequence='3' />
+    <menuitem id='floor_menu' name='楼层定义' parent ='rm_setting_menu'
+              action='rm_floor_action' sequence='3' />
 
-    <record id="rm_rm_floor_tree" model="ir.ui.view">
-      <field name="name">rm.rm_floor.tree</field>
-      <field name="model">rm.rm_floor</field>
+    <record id="rm_floor_tree" model="ir.ui.view">
+      <field name="name">rm.floor.tree</field>
+      <field name="model">rm.floor</field>
         <field name='arch' type='xml'>
             <tree string= '楼层维护' editable="bottom">
                 <field name="name" />
@@ -82,9 +82,9 @@
         </field>
     </record>
 
-    <record id='rm_rm_floor_form' model ='ir.ui.view'>
-        <field name='name'>rm.rm_floor.form</field>
-        <field name='model'>rm.rm_floor</field>
+    <record id='rm_floor_form' model ='ir.ui.view'>
+        <field name='name'>rm.floor.form</field>
+        <field name='model'>rm.floor</field>
         <field name='arch' type='xml'>
             <form string='楼层'>
                 <field name="name" />
@@ -96,29 +96,27 @@
     </record>
 
 
-
-
         <!--菜单事件-->
-    <record id='rm_rm_room_type_action' model='ir.actions.act_window'>
+    <record id='rm_room_type_action' model='ir.actions.act_window'>
         <field name='name'>房型</field>
-        <field name='res_model'>rm.rm_room_type</field>
+        <field name='res_model'>rm.room_type</field>
         <field name='view_type'>form</field>
         <field name='view_mode'>tree,form</field>
     </record>
 
-    <menuitem id='rm_rm_room_type_menu' name='房间类型' parent ='rm_setting_menu'
-              action='rm_rm_room_type_action' sequence='4' />
+    <menuitem id='rm_room_type_menu' name='房间类型' parent ='rm_setting_menu'
+              action='rm_room_type_action' sequence='4' />
 
 
-    <record id="rm_rm_room_type_tree" model="ir.ui.view">
-      <field name="name">rm.rm_room_type.tree</field>
-      <field name="model">rm.rm_room_type</field>
+    <record id="rm_room_type_tree" model="ir.ui.view">
+      <field name="name">rm.room_type.tree</field>
+      <field name="model">rm.room_type</field>
         <field name='arch' type='xml'>
             <tree string= '房间类型'>
                 <field name="name" />
                 <field name="code" />
                 <field name="sort_id"/>
-                <field name="func_dummy"/>
+                <field name="func_dummy"/>9
                 <field name="rate"/>
                 <field name="company_id"/>
             </tree>
@@ -126,9 +124,9 @@
     </record>
 
 
-    <record id='rm_rm_room_type_form' model ='ir.ui.view'>
-        <field name='name'>rm.rm_room_type.form</field>
-        <field name='model'>rm.rm_room_type</field>
+    <record id='rm_room_type_form' model ='ir.ui.view'>
+        <field name='name'>rm.room_type.form</field>
+        <field name='model'>rm.room_type</field>
         <field name='arch' type='xml'>
             <form string='房型'>
                 <sheet>
@@ -148,5 +146,62 @@
             </form>
         </field>
     </record>
+
+
+
+
+        <!--菜单事件-->
+    <record id='rm_room_feature_action' model='ir.actions.act_window'>
+        <field name='name'>房型</field>
+        <field name='res_model'>rm.room_feature</field>
+        <field name='view_type'>form</field>
+        <field name='view_mode'>tree,form</field>
+    </record>
+
+    <menuitem id='rm_room_feature_menu' name='房间特点' parent ='rm_setting_menu'
+              action='rm_room_feature_action' sequence='5' />
+
+
+    <record id="rm_room_feature_tree" model="ir.ui.view">
+      <field name="name">rm.room_feature.tree</field>
+      <field name="model">rm.room_feature</field>
+        <field name='arch' type='xml' >
+            <tree string= '房间特点' editable="bottom">
+                <field name="feature_cat_id" />
+                <field name="name" />
+            </tree>
+        </field>
+    </record>
+
+
+    <record id='rm_room_feature_form' model ='ir.ui.view'>
+        <field name='name'>rm.room_feature.form</field>
+        <field name='model'>rm.room_feature</field>
+        <field name='arch' type='xml'>
+            <form string='房间特点'>
+                <sheet>
+                    <group>
+                        <field name="feature_cat_id" />
+                        <field name="name" />
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id='rm_room_feature_cat_form' model ='ir.ui.view'>
+        <field name='name'>rm.room_feature_cat.form</field>
+        <field name='model'>rm.room_feature_cat</field>
+        <field name='arch' type='xml'>
+            <form string='房间特点'>
+                <sheet>
+                    <group>
+                        <field name="name" />
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
 
 </odoo>

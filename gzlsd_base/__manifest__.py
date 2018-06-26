@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 {
-    'name': "GZLSD 房间管理",
+    'name': "GZLSD 基础设置管理",
     'author': "广州菱致计算机科技有限公司",
     'website': "www.sglsd.com",
     'category': 'gzlsd',
