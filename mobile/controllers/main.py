@@ -19,6 +19,11 @@ from odoo.http import request
 
 from odoo.addons.web.controllers.main import WebClient
 
+try:
+    from cStringIO import StringIO
+except Exception as e:
+    from StringIO import StringIO
+
 
 # auth 3种模式
 # user: The user must be authenticated and the current request will perform using the rights that the user
@@ -130,24 +135,6 @@ class MobileSupport(http.Controller):
                     'image_s': user.image_small}
         return {'user': user_inf, 'menus': menus}
 
-    # @http.route('/mobile', type='http', auth='none')
-    # def index(self):
-    #     if not request.db or not request.session.uid:
-    #         return werkzeug.utils.redirect('/mobile/login')
-    #
-    #     return werkzeug.utils.redirect('/mobile/home')
-    #
-    # @http.route('/mobile/home', auth='public')
-    # def home(self):
-    #     if not request.session.get('uid') or not request.session.uid:
-    #         return werkzeug.utils.redirect('/mobile/login')
-    #
-    #     template = env.get_template('index.html')
-    #     return template.render({
-    #         'menus': request.env['mobile.view'].search_read(
-    #             fields=['name', 'icon_class', 'display_name', 'using_wizard'])
-    #     })
-    #
     # def _get_model(self, name):
     #     view = request.env['mobile.view'].search([('name', '=', name)])
     #     return request.env[view.model]
@@ -279,7 +266,7 @@ class MobileSupport(http.Controller):
         return version_info
 
     @http.route(['/mobile/workflow/<string:object>/<int:id>/<string:signal>'],
-                type="http", auth='none', csrf=False, website=True)
+                type="http", auth='user', csrf=False, website=True)
     @make_response()
     def call_workflow(self, object, id=None, signal=None, **kwargs):
         """
@@ -307,7 +294,7 @@ class MobileSupport(http.Controller):
 
     @http.route(['/mobile/report/<string:xml_id>/<int:id>',
                  '/mobile/report/<string:xml_id>'],
-                type="http", auth='none', csrf=False, website=True)
+                type="http", auth='user', csrf=False, website=True)
     @make_response()
     def call_report(self, xml_id, id=None, **kwargs):
         """
@@ -353,7 +340,7 @@ class MobileSupport(http.Controller):
     @http.route(['/mobile/object/<string:object>',
                  '/mobile/object/<string:object>/<int:id>',
                  '/mobile/object/<string:object>/<int:id>/<string:method>'],
-                type="http", auth='none', csrf=False, website=True)
+                type="http", auth='user', csrf=False, website=True)
     @make_response()
     def perform_multi_request(self, object, id=None, method=None, **kwargs):
         user = request.env.user
@@ -367,7 +354,7 @@ class MobileSupport(http.Controller):
         """
         datas = {}
 
-        request_code, request_data = 200, {}
+        # request_code, request_data = 200, {}
         ids, payload = [id] if id else [], {}
         arguments, k_arguments = [], {}
 
