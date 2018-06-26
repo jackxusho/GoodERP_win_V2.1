@@ -1,152 +1,59 @@
-<?xml version="1.0" encoding="utf-8"?>
 <odoo>
-
-
-
-    <!--菜单-->
-    <menuitem name="房间管理"  id="rm_root" sequence='0' />
-
-    <menuitem id='rm_setting_menu' name='设置' sequence='1' parent ='rm_root'/>
-
-    <!--菜单事件-->
-    <record id='rm_rm_building_action' model='ir.actions.act_window'>
-        <field name='name'>建筑</field>
-        <field name='res_model'>rm.rm_building</field>
-        <field name='view_type'>form</field>
-        <field name='view_mode'>tree,form</field>
+  <data>
+    <!-- explicit list view definition -->
+    <!--
+    <record model="ir.ui.view" id="gzlsd_mhotel.list">
+      <field name="name">gzlsd_mhotel list</field>
+      <field name="model">gzlsd_mhotel.gzlsd_mhotel</field>
+      <field name="arch" type="xml">
+        <tree>
+          <field name="name"/>
+          <field name="value"/>
+          <field name="value2"/>
+        </tree>
+      </field>
     </record>
+    -->
 
-    <menuitem id='rm_building_menu' name='楼栋/建筑' parent ='rm_setting_menu'
-              action='rm_rm_building_action' sequence='2' />
-
-    <record id="rm_rm_building_tree" model="ir.ui.view">
-      <field name="name">rm.rm_building.tree</field>
-      <field name="model">rm.rm_building</field>
-        <field name='arch' type='xml'>
-            <tree string= '楼栋/建筑'>
-                <field name="name" />
-                <field name="sort_id"/>
-                <field name="company_id"/>
-                <field name="longitude"/>
-                <field name="latitude"/>
-            </tree>
-        </field>
+    <!-- actions opening views on models -->
+    <!--
+    <record model="ir.actions.act_window" id="gzlsd_mhotel.action_window">
+      <field name="name">gzlsd_mhotel window</field>
+      <field name="res_model">gzlsd_mhotel.gzlsd_mhotel</field>
+      <field name="view_mode">tree,form</field>
     </record>
+    -->
 
-    <record id='rm_rm_building_form' model ='ir.ui.view'>
-        <field name='name'>rm.rm_building.form</field>
-        <field name='model'>rm.rm_building</field>
-        <field name='arch' type='xml'>
-            <form string='楼栋/建筑'>
-                <sheet>
-                    <group>
-                        <group>
-                            <field name="name" />
-                            <field name="sort_id"  placeholder="越小排越前"/>
-                            <field name="company_id"/>
-                        </group>
-                        <group>
-                            <field name="longitude"/>
-                            <field name="latitude"/>
-                        </group>
-                    </group>
-                    <group>
-                        <field name="img" class="oe_attachments" widget="many2many_binary"/>
-                    </group>
-                </sheet>
-            </form>
-        </field>
+    <!-- server action to the one above -->
+    <!--
+    <record model="ir.actions.server" id="gzlsd_mhotel.action_server">
+      <field name="name">gzlsd_mhotel server</field>
+      <field name="model_id" ref="model_gzlsd_mhotel_gzlsd_mhotel"/>
+      <field name="code">
+        action = {
+          "type": "ir.actions.act_window",
+          "view_mode": "tree,form",
+          "res_model": self._name,
+        }
+      </field>
     </record>
+    -->
 
-        <!--菜单事件-->
-    <record id='rm_rm_floor_action' model='ir.actions.act_window'>
-        <field name='name'>楼层</field>
-        <field name='res_model'>rm.rm_floor</field>
-        <field name='view_type'>form</field>
-        <field name='view_mode'>tree,form</field>
-    </record>
-
-    <menuitem id='rm_floor_menu' name='楼层定义' parent ='rm_setting_menu'
-              action='rm_rm_floor_action' sequence='3' />
-
-    <record id="rm_rm_floor_tree" model="ir.ui.view">
-      <field name="name">rm.rm_floor.tree</field>
-      <field name="model">rm.rm_floor</field>
-        <field name='arch' type='xml'>
-            <tree string= '楼层维护' editable="bottom">
-                <field name="name" />
-                <field name="code" />
-                <field name="sort_id"/>
-                <field name="company_id"/>
-            </tree>
-        </field>
-    </record>
-
-    <record id='rm_rm_floor_form' model ='ir.ui.view'>
-        <field name='name'>rm.rm_floor.form</field>
-        <field name='model'>rm.rm_floor</field>
-        <field name='arch' type='xml'>
-            <form string='楼层'>
-                <field name="name" />
-                <field name="code" />
-                <field name="sort_id"/>
-                <field name="company_id"/>
-            </form>
-        </field>
-    </record>
-
-
-
-
-        <!--菜单事件-->
-    <record id='rm_rm_room_type_action' model='ir.actions.act_window'>
-        <field name='name'>房型</field>
-        <field name='res_model'>rm.rm_room_type</field>
-        <field name='view_type'>form</field>
-        <field name='view_mode'>tree,form</field>
-    </record>
-
-    <menuitem id='rm_rm_room_type_menu' name='房间类型' parent ='rm_setting_menu'
-              action='rm_rm_room_type_action' sequence='4' />
-
-
-    <record id="rm_rm_room_type_tree" model="ir.ui.view">
-      <field name="name">rm.rm_room_type.tree</field>
-      <field name="model">rm.rm_room_type</field>
-        <field name='arch' type='xml'>
-            <tree string= '房间类型'>
-                <field name="name" />
-                <field name="code" />
-                <field name="sort_id"/>
-                <field name="func_dummy"/>
-                <field name="rate"/>
-                <field name="company_id"/>
-            </tree>
-        </field>
-    </record>
-
-
-    <record id='rm_rm_room_type_form' model ='ir.ui.view'>
-        <field name='name'>rm.rm_room_type.form</field>
-        <field name='model'>rm.rm_room_type</field>
-        <field name='arch' type='xml'>
-            <form string='房型'>
-                <sheet>
-                    <group>
-                        <field name="name" />
-                        <field name="code" />
-                        <field name="sort_id"/>
-                        <field name="func_dummy"/>
-                        <field name="rate"/>
-                        <field name="company_id"/>
-                    </group>
-                    <group>
-                        <field name='img' widget='image' nolabel='1'
-                            options='{"preview_image": "img", "width": "100%"}'/>
-                    </group>
-                </sheet>
-            </form>
-        </field>
-    </record>
-
+    <!-- Top menu item -->
+    <!--
+    <menuitem name="gzlsd_mhotel" id="gzlsd_mhotel.menu_root"/>
+    -->
+    <!-- menu categories -->
+    <!--
+    <menuitem name="Menu 1" id="gzlsd_mhotel.menu_1" parent="gzlsd_mhotel.menu_root"/>
+    <menuitem name="Menu 2" id="gzlsd_mhotel.menu_2" parent="gzlsd_mhotel.menu_root"/>
+    -->
+    <!-- actions -->
+    <!--
+    <menuitem name="List" id="gzlsd_mhotel.menu_1_list" parent="gzlsd_mhotel.menu_1"
+              action="gzlsd_mhotel.action_window"/>
+    <menuitem name="Server to list" id="gzlsd_mhotel" parent="gzlsd_mhotel.menu_2"
+              action="gzlsd_mhotel.action_server"/>
+    -->
+  </data>
 </odoo>
