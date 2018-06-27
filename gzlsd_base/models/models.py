@@ -1,6 +1,32 @@
 # -*- coding: utf-8 -*-
 
 from odoo import models, fields, http, api
+from odoo.exceptions import UserError
+
+
+class Site(models.Model):
+    _name = 'rm.site'
+    _rec_name = 'name'
+
+    name = fields.Char(string=u'分店名称', required=True)
+    parent_site_id = fields.Many2one(string=u'上级门店', comodel_name='rm.site',
+                                     domain="[('id', '!=', id)]")
+    google_map = fields.Char(string="Map")
+    img = fields.Many2many('ir.attachment', string=u"门店图片")
+    company_id = fields.Many2one(string=u'所属公司', required=True, comodel_name='res.company',
+                                 domain="[('is_company', '=', True)]",
+                                 default=lambda self: self.env.user.company_id)
+
+    @api.one
+    @api.constrains('parent_site_id')
+    def _check_parent_site_id(self):
+        '''上级门店不能选择自己和下级的门店'''
+        if self.parent_site_id:
+            childs = self.env['rm.site'].search(
+                [('parent_site_id', '=', self.id)])
+            print(type(childs))
+            if self.parent_site_id in (childs, self.id):
+                raise UserError(u'上级门店不能选择他自己或者他的下级门店')
 
 
 class Building(models.Model):
@@ -9,12 +35,8 @@ class Building(models.Model):
 
     name = fields.Char(string=u'建筑名称', required=True)
     sort_id = fields.Integer(string=u'排序值', required=True)
-    latitude = fields.Float(string=u'维度', digits=(2, 10), required=False)
-    longitude = fields.Float(string=u'经度', digits=(2, 10), required=False)
     img = fields.Many2many('ir.attachment', string=u"建筑图片")
-    company_id = fields.Many2one(string=u'所属公司', required=True, comodel_name='res.partner',
-                                 domain="[('is_company', '=', True)]",
-                                 default=lambda self: self.env.user.company_id)
+    site_id = fields.Many2one(string=u'所属门店', required=True, comodel_name='res.site')
 
 
 class Floor(models.Model):
@@ -24,9 +46,6 @@ class Floor(models.Model):
     name = fields.Char(string=u'楼层名字', required=True)
     code = fields.Char(string=u"楼层代码", required=True, )
     sort_id = fields.Integer(string=u'排序值', required=True)
-    company_id = fields.Many2one(string=u'所属公司', required=True, comodel_name='res.partner',
-                                 domain="[('is_company', '=', True)]",
-                                 default=lambda self: self.env.user.company_id)
 
 
 # 房间类型
@@ -46,9 +65,7 @@ class RoomType(models.Model):
     func_dummy = fields.Selection(string="房型标记", selection=RM_FUNC_TYPE, required=True, default='G',
                                   track_visibility='aways')
     rate = fields.Float(string="标准房价", required=True)
-    company_id = fields.Many2one(string=u'所属公司', required=True, comodel_name='res.partner',
-                                 domain="[('is_company', '=', True)]",
-                                 default=lambda self: self.env.user.company_id)
+    site_id = fields.Many2one(string=u'所属门店', required=True, comodel_name='res.site')
     img = fields.Binary(string=u"建筑图片")
 
 
@@ -69,5 +86,3 @@ class RoomFeature(models.Model):
     feature_cat_id = fields.Many2one(string=u'所属分类', required=True,
                                      comodel_name='rm.room_feature_cat'
                                      )
-
-
